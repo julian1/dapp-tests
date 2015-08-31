@@ -22,9 +22,9 @@ var AppStore = assign({}, EventEmitter.prototype, {
   },
 
   addItem: function(item) {
-  	if(items.indexOf(item) === -1) {
+//  	if(items.indexOf(item) === -1) {
   		items.push(item);
-  	}
+ // 	}
   },
 
   removeItem: function(index) {
