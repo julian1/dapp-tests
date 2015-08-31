@@ -26,6 +26,8 @@ web3.eth.filter("latest", function(error, result) {
     web3.eth.getBlock("latest", function(error, result) {
       if (!error) {
         wss.clients.forEach(function each(ws) {
+
+        console.log("sending block " + result);
           ws.send( JSON.stringify( {type: "block", block: result }), function ack(error) {
             // client.send( result,  function ack(error) {
               if( error != undefined) {

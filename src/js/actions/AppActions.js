@@ -17,3 +17,54 @@ var AppActions = {
 }
 
 module.exports = AppActions;
+
+  var wsUri = "ws://127.0.0.1/";
+
+  function init()
+  {
+
+      AppActions.addItem("connecting");
+    // console.log( "connecting to websocket" );
+    websocket = new WebSocket(wsUri);
+    websocket.onopen = function(evt) { onOpen(evt) };
+    websocket.onclose = function(evt) { onClose(evt) };
+    websocket.onmessage = function(evt) { onMessage(evt) };
+    websocket.onerror = function(evt) { onError(evt) };
+  }
+
+  function onOpen(evt)
+  {
+    // console.log("onOpen");
+      AppActions.addItem("onOpen");
+    doSend("WebSocket rocks");
+  }
+
+  function onClose(evt)
+  {
+      AppActions.addItem("onClose");
+    //console.log("onClose");
+    // writeToScreen("DISCONNECTED");
+  }
+
+  function onMessage(evt)
+  {
+      AppActions.addItem("onMessage");
+    // console.log( "onMessage " + evt.data );
+  }
+
+  function onError(evt)
+  {
+      AppActions.addItem("onError");
+    // console.log("onError" + evt.data );
+    // writeToScreen('<span style="color: red;">ERROR:</span> ' +  evt.data  );
+  }
+
+  function doSend(message)
+  {
+    // console.log("doSEnd " + message);
+    // writeToScreen("SENT: " + message); 
+    websocket.send(message);
+  }
+
+init();
+
