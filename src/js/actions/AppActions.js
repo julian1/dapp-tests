@@ -18,6 +18,7 @@ var AppActions = {
 
 module.exports = AppActions;
 
+  // is this correct??? yes... we get the connection.. 
   var wsUri = "ws://127.0.0.1/";
 
   function init()
@@ -48,7 +49,7 @@ module.exports = AppActions;
 
   function onMessage(evt)
   {
-      AppActions.addItem("onMessage");
+      AppActions.addItem("onMessage" + evt.data );
     // console.log( "onMessage " + evt.data );
   }
 
