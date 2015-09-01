@@ -9,9 +9,7 @@ var server = require('http').createServer()
   , app = express()
   , port = 80;
 
-
 var path = require('path');
-
 var web3 = require('web3');
 
 
@@ -41,6 +39,29 @@ web3.eth.filter("latest", function(error, result) {
 });
 
 
+// bind ws lexically
+var recursive = function () {
+
+  wss.clients.forEach(function each(ws) {
+
+    // this isn't very 
+    console.log("sending tick");
+ 
+    ws.send( JSON.stringify({type: "tick" }), function ack(error) {
+      if(error != undefined) {
+        console.log( "problem sending " + error );
+      } 
+    });
+  });
+
+  // only want to do this when really sent...
+  setTimeout(recursive,1000);
+}
+
+recursive();
+
+
+
 
 // serves files index.html etc
 app.use('/', express.static(path.join(__dirname, 'dist')));
@@ -61,23 +82,6 @@ wss.on('connection', function connection(ws) {
   console.log('got connection : %s', location );
   //console.log(ws);
 
-  // bind ws lexically
-  var recursive = function () {
-
-    // { binary: true, mask: true }
-    //ws.send( Date.now(), { binary: true, mask: true }, function ack(error) {
-    ws.send( JSON.stringify({type: "tick" }), function ack(error) {
-      // if error is not defined, the send has been completed,
-      // otherwise the error object will indicate what failed.
-      if(error != undefined) {
-        console.log( "problem sending " + error );
-      } else { 
-        setTimeout(recursive,1000);
-      }
-    });
-
-  }
-  recursive();
 
   ws.on('message', function incoming(message) {
     console.log('received: %s', message);

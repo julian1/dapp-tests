@@ -50,7 +50,7 @@ module.exports = AppActions;
   function onMessage(evt)
   {
       AppActions.addItem("onMessage" + evt.data );
-    // console.log( "onMessage " + evt.data );
+    console.log( "onMessage " + evt.data );
   }
 
   function onError(evt)
