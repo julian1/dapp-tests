@@ -18,6 +18,8 @@ var AppActions = {
 
 module.exports = AppActions;
 
+var count = 0;
+
   // is this correct??? yes... we get the connection.. 
   var wsUri = "ws://127.0.0.1/";
 
@@ -49,8 +51,9 @@ module.exports = AppActions;
 
   function onMessage(evt)
   {
-      AppActions.addItem("onMessage" + evt.data );
-    console.log( "onMessage " + evt.data );
+    //console.log( "onMessage begin " + evt.data );
+      AppActions.addItem("onMessage" + evt.data + count++ );
+    //console.log( "onMessage finish " );
   }
 
   function onError(evt)
