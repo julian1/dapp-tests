@@ -1,7 +1,10 @@
 
-// In node,
+// # In node, 
+// node deploy.js 
+// #  or interactive
 // .load deploy.js
 
+// Based on, https://www.ethereum.org/token
 
 fs = require('fs');
 web3 = require('web3');
@@ -50,7 +53,23 @@ if(false) {
 // contract.new() and contract.at() ... are the way to interact...
 token = contract.at('0xadd1a267057309c917e1ac794050201378e13b0d');
 
-console.log( token.coinBalanceOf(web3.eth.accounts[0]) + " tokens" )
+token.coinBalanceOf.call(web3.eth.accounts[0]) + " tokens"; 
+token.coinBalanceOf.call(web3.eth.accounts[1]) + " tokens"; 
+
+// console.log( "second " + web3.eth.accounts[1] );
 
 
-process.exit();
+var event = token.CoinTransfer({}, '', function(error, result){
+  if (!error)
+    console.log("Coin transfer: " 
+      + result.args.amount + " tokens were sent. Balances now are as following: \n Sender:\t" 
+      + result.args.sender + " \t" + token.coinBalanceOf.call(result.args.sender) 
+      + " tokens \n Receiver:\t" + result.args.receiver + " \t" 
+      + token.coinBalanceOf.call(result.args.receiver) + " tokens" )
+});
+
+
+// > token.sendCoin.sendTransaction(web3.eth.accounts[1], 100, {from: web3.eth.accounts[0]});
+// '0xe222e387a4f2c4c79d701177064ca9b498799dbcc0bbd9bcbbe6d2e982c525db'
+
+// process.exit();
