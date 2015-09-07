@@ -1,4 +1,8 @@
 
+// In node,
+// .load deploy.js
+
+
 fs = require('fs');
 web3 = require('web3');
 
@@ -12,14 +16,14 @@ compiled = web3.eth.compile.solidity(source);
 // console.log(compiled);
 
 contract = web3.eth.contract(compiled.token.info.abiDefinition);
-console.log(contract);
+// console.log(contract);
 
-supply = 1000;
 
 // deploy...
 if(false) {
+  var supply = 1000;
   var token = contract.new(
-    supply, 
+    supply,
     {
       from:web3.eth.accounts[0],
       data:compiled.token.code,
@@ -39,11 +43,14 @@ if(false) {
   });
 };
 
-// process.exit();
 
 // Contract mined! Address: 0xadd1a267057309c917e1ac794050201378e13b0d
 
 // now we want to try and do something with the k.
+// contract.new() and contract.at() ... are the way to interact...
+token = contract.at('0xadd1a267057309c917e1ac794050201378e13b0d');
+
+console.log( token.coinBalanceOf(web3.eth.accounts[0]) + " tokens" )
 
 
-
+process.exit();
