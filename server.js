@@ -11,9 +11,41 @@ var server = require('http').createServer()
 
 var path = require('path');
 var web3 = require('web3');
+var fs = require('fs');
 
 
 web3.setProvider(new web3.providers.HttpProvider('http://localhost:8545'));
+
+
+////////////
+/// Need to find out how can record the contract...
+source = fs.readFileSync('./token.solc' ).toString('ascii');
+compiled = web3.eth.compile.solidity(source);
+contract = web3.eth.contract(compiled.token.info.abiDefinition);
+token = contract.at('0xadd1a267057309c917e1ac794050201378e13b0d');
+
+var event = token.CoinTransfer({}, '', function(error, result){
+  if (!error) {
+/*    console.log("Coin transfer: " 
+      + result.args.amount + " tokens were sent. Balances now are as following: \n Sender:\t" 
+      + result.args.sender + " \t" + token.coinBalanceOf.call(result.args.sender) 
+      + " tokens \n Receiver:\t" + result.args.receiver + " \t" 
+      + token.coinBalanceOf.call(result.args.receiver) + " tokens" );
+*/
+
+  wss.clients.forEach(function each(ws) {
+    ws.send( JSON.stringify( {type: "token_sent" }), function ack(error) {
+      // client.send( result,  function ack(error) {
+        if( error != undefined) {
+          console.log( "problem sending " + error );
+        }
+    });
+  });
+  }
+});
+////////////
+
+
 
 
 // Additionally you can start watching right away, by passing a callback:
@@ -25,7 +57,7 @@ web3.eth.filter("latest", function(error, result) {
       if (!error) {
         wss.clients.forEach(function each(ws) {
 
-        console.log("sending block " + result);
+          console.log("sending block " + result);
           ws.send( JSON.stringify( {type: "block", block: result }), function ack(error) {
             // client.send( result,  function ack(error) {
               if( error != undefined) {
@@ -58,7 +90,7 @@ var recursive = function () {
   setTimeout(recursive,1000);
 }
 
-recursive();
+// recursive();
 
 
 

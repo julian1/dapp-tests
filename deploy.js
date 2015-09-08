@@ -24,6 +24,7 @@ contract = web3.eth.contract(compiled.token.info.abiDefinition);
 
 // deploy...
 if(false) {
+  // must ensure that accounts[0] is unlocked from geth,
   var supply = 1000;
   var token = contract.new(
     supply,
@@ -73,3 +74,7 @@ var event = token.CoinTransfer({}, '', function(error, result){
 // '0xe222e387a4f2c4c79d701177064ca9b498799dbcc0bbd9bcbbe6d2e982c525db'
 
 // process.exit();
+
+// for all mappings...
+// how can we interogate token.coinBalanceOf()
+
